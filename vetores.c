@@ -57,6 +57,7 @@ int acessar(p_matriz matriz, int linha, int coluna, int k) {
         if (matriz->linha[i] == linha && matriz->coluna[i] == coluna){
             return matriz->dados[i];
         }
+        if (matriz->linha[i] == -1) return -1;
     }
     return -1;
 }
