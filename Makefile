@@ -3,10 +3,13 @@ LDFLAGS = -lm
 
 .PHONY: all clean
 
-all: vetores
+all: vetores arvore
 
 vetores: vetores.c
 	gcc $(CFLAGS) vetores.c -o vetores $(LDFLAGS)
 
+arvore: arvore.c arvore_utils.c
+	gcc $(CFLAGS) arvore.c -o arvore $(LDFLAGS)
+
 clean:
-	rm -f vetores
+	rm -f vetores arvore

@@ -17,7 +17,7 @@ p_matriz cria_matriz(int k){
     matriz->coluna = (int *) malloc(tamanho * sizeof(int));
 
     for (int i = 0; i < tamanho; i++) {
-        matriz->dados[i] = -1;
+        matriz->dados[i] = 0;
         matriz->linha[i] = -1;
         matriz->coluna[i] = -1;
     }
