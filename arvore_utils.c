@@ -130,3 +130,12 @@ int acessar(p_no no, int linha, int coluna) {
         return acessar(no->direito, linha, coluna);
     }
 }
+
+void pre_ordem(p_no no) {
+    if(no != NULL) {
+        printf("%d ", no->dado);
+        pre_ordem(no->esquerdo);
+        pre_ordem(no->direito);
+    }
+}
+

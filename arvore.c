@@ -27,23 +27,21 @@ void inserir_atualizar_matriz(p_matriz matriz, int dado, int linha, int coluna) 
     matriz->transposta = inserir_atualizar(matriz->transposta, dado, coluna, linha);
 }
 
-void pre_ordem(p_no no)
-{
-    if(no != NULL)
-    {
-        printf("%d ", no->dado);
-        pre_ordem(no->esquerdo);
-        pre_ordem(no->direito);
-    }
+int acessa_posicao(p_matriz matriz, int linha, int coluna) {
+    return acessar(matriz->padrao, linha, coluna);
 }
 
-int main(){
+p_no retorna_transposta(p_matriz matriz){
+    return matriz->transposta;
+}
+
+int main() {
     p_matriz matriz = cria_matriz();
     int k;
     scanf("%d", &k);
     
     int dado = 0, linha = 0, coluna = 0;
-    for(int i = 0; i < k + 1; i++) {
+    for(int i = 0; i < k; i++) {
         scanf("%d %d %d", &dado, &linha, &coluna);
         inserir_atualizar_matriz(matriz, dado, linha, coluna);
     }
@@ -53,10 +51,10 @@ int main(){
         printf("%d \n", acessar(matriz->padrao, linha, coluna));
     }
 
-
-
     pre_ordem(matriz->padrao);
     printf("\n");
+
+    printf("%d\n", acessa_posicao(matriz, 1, 2));
 
     destroi_matriz(matriz);
     return 0;

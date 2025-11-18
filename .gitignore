@@ -6,6 +6,8 @@
 *.ko
 *.obj
 *.elf
+arvore
+vetores
 
 # Linker output
 *.ilk
