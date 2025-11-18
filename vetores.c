@@ -4,6 +4,7 @@
 #define FATOR 1000
 
 typedef struct matriz {
+    int tamanho;
     int *dados;
     int *linha;
     int *coluna;
@@ -12,6 +13,7 @@ typedef struct matriz {
 p_matriz cria_matriz(int k){
     int tamanho = (FATOR * k);
     p_matriz matriz = (p_matriz) malloc(sizeof(p_matriz));
+    matriz->tamanho = tamanho;
     matriz->dados = (int *) malloc(tamanho * sizeof(int));
     matriz->linha = (int *) malloc(tamanho * sizeof(int));
     matriz->coluna = (int *) malloc(tamanho * sizeof(int));
@@ -70,6 +72,12 @@ p_matriz retorna_transposta(p_matriz matriz){
     return transposta;
 }
 
+void multiplica_escalar(p_matriz matriz, int escalar){
+    for (int i = 0; i < matriz->tamanho; i++)
+        if (matriz->linha[i] >= 0)
+            matriz->dados[i] *= escalar;
+}
+
 int main() {
     int n;
     printf("Insira o número de elementos não nulos: \n");
@@ -82,12 +90,19 @@ int main() {
         inserirOuAtualizar(matriz, dado, linha, coluna, n);
     }
     
-    /* 
+ 
+    printf("\n");
     for(int i = 0; i < FATOR * n; i++) {
         if (matriz->linha[i] != -1)
             printf("%d %d %d\n", matriz->dados[i], matriz->linha[i], matriz->coluna[i]);
     }
-    */
+
+    multiplica_escalar(matriz, 3);
+
+    printf("\n");
+    for(int i = 0; i < FATOR * n; i++)
+        if (matriz->linha[i] != -1)
+            printf("%d %d %d\n", matriz->dados[i], matriz->linha[i], matriz->coluna[i]);
 
     /*
     for (int i = 0; i < 2; i++){
@@ -96,8 +111,8 @@ int main() {
     }
     */
 
-    p_matriz transposta = retorna_transposta(matriz);
     /*
+    p_matriz transposta = retorna_transposta(matriz);
     for(int i = 0; i < FATOR * n; i++) {
         if(transposta->linha[i] != -1) {
             printf("%d %d %d\n", transposta->dados[i], transposta->linha[i], transposta->coluna[i]);

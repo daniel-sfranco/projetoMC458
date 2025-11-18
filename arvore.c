@@ -35,6 +35,19 @@ p_no retorna_transposta(p_matriz matriz){
     return matriz->transposta;
 }
 
+void multiplica_escalar_rec(p_no arvore, int escalar){
+    if(arvore == NULL)
+        return;
+    arvore->dado = arvore->dado * escalar;
+    multiplica_escalar_rec(arvore->direito, escalar);
+    multiplica_escalar_rec(arvore->esquerdo, escalar);
+}
+
+void multiplica_escalar(p_matriz matriz, int escalar) {
+    multiplica_escalar_rec(matriz->padrao, escalar);
+    multiplica_escalar_rec(matriz->transposta, escalar);
+}
+
 int main() {
     p_matriz matriz = cria_matriz();
     int k;
@@ -46,15 +59,21 @@ int main() {
         inserir_atualizar_matriz(matriz, dado, linha, coluna);
     }
 
+    /*
     for (int i = 0; i < 2; i++){
         scanf("%d %d", &linha, &coluna);
         printf("%d \n", acessar(matriz->padrao, linha, coluna));
     }
+    */
 
     pre_ordem(matriz->padrao);
-    printf("\n");
+    printf("\n\n");
 
-    printf("%d\n", acessa_posicao(matriz, 1, 2));
+    multiplica_escalar(matriz, 3);
+    pre_ordem(matriz->padrao);
+    printf("\n\n");
+
+    // printf("%d\n", acessa_posicao(matriz, 1, 2));
 
     destroi_matriz(matriz);
     return 0;
