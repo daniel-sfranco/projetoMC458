@@ -6,12 +6,15 @@
 typedef struct matriz_composta *p_matriz;
 
 struct matriz_composta {
-    p_no padrao, transposta;
+    int n, m;
+	p_no padrao, transposta;
 };
 
-p_matriz cria_matriz() {
+p_matriz cria_matriz(int linhas, int colunas) {
     p_matriz matriz = (p_matriz) malloc(sizeof(struct matriz_composta));
-    matriz->padrao = NULL;
+    matriz->n = linhas;
+	matriz->m = colunas;
+	matriz->padrao = NULL;
     matriz->transposta = NULL;
     return matriz;
 }
@@ -22,13 +25,13 @@ void destroi_matriz(p_matriz matriz){
     free(matriz);
 }
 
-void inserir_atualizar_matriz(p_matriz matriz, int dado, int linha, int coluna) {
-    matriz->padrao = inserir_atualizar(matriz->padrao, dado, linha, coluna);
-    matriz->transposta = inserir_atualizar(matriz->transposta, dado, coluna, linha);
+void inserir_atualizar_matriz(p_matriz matriz, int dado, int linha, int coluna, int m) {
+    matriz->padrao = inserir_atualizar(matriz->padrao, dado, linha, coluna, m);
+    matriz->transposta = inserir_atualizar(matriz->transposta, dado, coluna, linha, m);
 }
 
-int acessa_posicao(p_matriz matriz, int linha, int coluna) {
-    return acessar(matriz->padrao, linha, coluna);
+int acessa_posicao(p_matriz matriz, int linha, int coluna, int m) {
+    return acessar(matriz->padrao, linha, coluna, m);
 }
 
 p_no retorna_transposta(p_matriz matriz){
@@ -49,20 +52,20 @@ void multiplica_escalar(p_matriz matriz, int escalar) {
 }
 
 int main() {
-    p_matriz matriz = cria_matriz();
-    int k;
-    scanf("%d", &k);
+    int k, n, m;
+    scanf("%d %d %d", &k, &n, &m);
+    p_matriz matriz = cria_matriz(n, m);
     
     int dado = 0, linha = 0, coluna = 0;
     for(int i = 0; i < k; i++) {
         scanf("%d %d %d", &dado, &linha, &coluna);
-        inserir_atualizar_matriz(matriz, dado, linha, coluna);
+        inserir_atualizar_matriz(matriz, dado, linha, coluna, m);
     }
 
     /*
     for (int i = 0; i < 2; i++){
         scanf("%d %d", &linha, &coluna);
-        printf("%d \n", acessar(matriz->padrao, linha, coluna));
+        printf("%d \n", acessar(matriz->padrao, linha, coluna, m));
     }
     */
 

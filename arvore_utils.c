@@ -9,19 +9,11 @@ struct no {
     p_no esquerdo, direito;
 };
 
-int calcula_chave(int linha, int coluna) {
-    int potencia = 10;
-    int col_temp = coluna;
-
-    while (col_temp >= 10) {
-        potencia *= 10;
-        col_temp /= 10;
-    }
-
-    return (linha * potencia) + coluna;
+int calcula_chave(int linha, int coluna, int m) {
+    return (linha * m) + coluna;
 }
 
-p_no cria_no(int dado, int linha, int coluna){
+p_no cria_no(int dado, int linha, int coluna, int m){
     p_no no = (p_no) malloc(sizeof(struct no));
     no->esquerdo = NULL;
     no->direito = NULL;
@@ -29,7 +21,7 @@ p_no cria_no(int dado, int linha, int coluna){
     no->dado = dado;
     no->linha = linha;
     no->coluna = coluna;
-    no->chave = calcula_chave(linha, coluna);
+    no->chave = calcula_chave(linha, coluna, m);
     return no;
 }
 
@@ -78,21 +70,21 @@ p_no rotaciona_esquerda(p_no no) {
     return dir;
 }
 
-p_no inserir_atualizar(p_no no, int dado, int linha, int coluna) {
+p_no inserir_atualizar(p_no no, int dado, int linha, int coluna, int m) {
     if (no == NULL) {
-        p_no novo = cria_no(dado, linha, coluna);
+        p_no novo = cria_no(dado, linha, coluna, m);
         return novo;
     }
 
-    int chave = calcula_chave(linha, coluna);
+    int chave = calcula_chave(linha, coluna, m);
 
-    if (chave == no->chave){
+    if (chave == no->chave && no->linha == linha && no->coluna == coluna){
         no->dado = dado;
         return no;
     } else if (chave < no->chave)
-        no->esquerdo = inserir_atualizar(no->esquerdo, dado, linha, coluna);
+        no->esquerdo = inserir_atualizar(no->esquerdo, dado, linha, coluna, m);
     else if (chave > no->chave)
-        no->direito = inserir_atualizar(no->direito, dado, linha, coluna);
+        no->direito = inserir_atualizar(no->direito, dado, linha, coluna, m);
 
     no->altura = ((mede_altura(no->esquerdo) > mede_altura(no->direito)) ?
         mede_altura(no->esquerdo) : mede_altura(no->direito)) + 1;
@@ -118,16 +110,16 @@ p_no inserir_atualizar(p_no no, int dado, int linha, int coluna) {
 }
 
 
-int acessar(p_no no, int linha, int coluna) {
+int acessar(p_no no, int linha, int coluna, int m) {
     if (no == NULL)
         return 0;
     if (no->linha == linha && no->coluna == coluna)
         return no->dado;
-    int chave = calcula_chave(linha, coluna);
+    int chave = calcula_chave(linha, coluna, m);
     if (chave < no->chave) {
-        return acessar(no->esquerdo, linha, coluna);
+        return acessar(no->esquerdo, linha, coluna, m);
     } else {
-        return acessar(no->direito, linha, coluna);
+        return acessar(no->direito, linha, coluna, m);
     }
 }
 
