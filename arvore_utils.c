@@ -113,29 +113,46 @@ p_no inserir_atualizar(p_no no, int dado, int linha, int coluna, int m) {
     return no;
 }
 
-p_no inserir_somar(p_no no, int dado, int linha, int coluna, int m) {
+p_no soma_no(p_no no, int dado, int linha, int coluna, int m) {
     if (no == NULL) {
         p_no novo = cria_no(dado, linha, coluna, m);
         return novo;
     }
-	
+
     int chave = calcula_chave(linha, coluna, m);
 
     if (chave == no->chave && no->linha == linha && no->coluna == coluna){
         no->dado += dado;
         return no;
     } else if (chave < no->chave)
-        no->esquerdo = inserir_somar(no->esquerdo, dado, linha, coluna, m);
+        no->esquerdo = inserir_atualizar(no->esquerdo, dado, linha, coluna, m);
     else if (chave > no->chave)
-        no->direito = inserir_somar(no->direito, dado, linha, coluna, m);
+        no->direito = inserir_atualizar(no->direito, dado, linha, coluna, m);
 
     no->altura = ((mede_altura(no->esquerdo) > mede_altura(no->direito)) ?
         mede_altura(no->esquerdo) : mede_altura(no->direito)) + 1;
     
-	no = balancear(no, chave);
+    int fator_b = 0;
+    if (no != NULL)
+        fator_b = mede_altura(no->esquerdo) - mede_altura(no->direito);
+
+    if (fator_b > 1 && chave < no->esquerdo->chave)
+        return rotaciona_direita(no);
+    if (fator_b < -1 && chave > no->direito->chave)
+        return rotaciona_esquerda(no);
+    if (fator_b > 1 && chave > no->esquerdo->chave) {
+        no->esquerdo = rotaciona_esquerda(no->esquerdo);
+        return rotaciona_direita(no);
+    }
+    if (fator_b < -1 && chave < no->direito->chave){
+        no->direito = rotaciona_direita(no->direito);
+        return rotaciona_esquerda(no);
+    }
 
     return no;
 }
+
+
 
 int acessar(p_no no, int linha, int coluna, int m) {
     if (no == NULL)
@@ -158,3 +175,24 @@ void pre_ordem(p_no no) {
     }
 }
 
+p_no inserir_somar(p_no no, int dado, int linha, int coluna, int m) {
+    if (no == NULL) {
+        p_no novo = cria_no(dado, linha, coluna, m);
+        return novo;
+    }
+	
+    int chave = calcula_chave(linha, coluna, m);
+
+    if (chave == no->chave && no->linha == linha && no->coluna == coluna){
+        no->dado += dado;
+        return no;
+    } else if (chave < no->chave)
+        no->esquerdo = inserir_somar(no->esquerdo, dado, linha, coluna, m);
+    else if (chave > no->chave)
+        no->direito = inserir_somar(no->direito, dado, linha, coluna, m);
+
+    no->altura = ((mede_altura(no->esquerdo) > mede_altura(no->direito)) ?
+        mede_altura(no->esquerdo) : mede_altura(no->direito)) + 1;
+    
+	no = balancear(no, chave);
+    return no;
