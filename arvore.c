@@ -129,30 +129,26 @@ int main() {
     scanf("%d %d %d", &k, &n, &m);
     while(scanf("%d %d %d", &k, &n, &m) != EOF){
         p_matriz matriz = cria_matriz(n, m);
-        
         int dado = 0, linha = 0, coluna = 0;
         for(int i = 0; i < k; i++) {
             scanf("%d %d %d", &dado, &linha, &coluna);
             inserir_atualizar_matriz(matriz, dado, linha, coluna, m);
+            int busca = acessa_posicao(matriz, linha, coluna, m);
         }
 
-        /*
-        for (int i = 0; i < 2; i++){
-            scanf("%d %d", &linha, &coluna);
-            printf("%d \n", acessar(matriz->padrao, linha, coluna, m));
-        }
-        */
+        p_matriz transposta = cria_matriz(m, n);
+        transposta->padrao = retorna_transposta(matriz);
+        transposta->transposta = matriz->padrao;
 
-        pre_ordem(matriz->padrao);
-        printf("\n\n");
+        p_matriz soma_simetrica = soma_matrizes(matriz, transposta);
 
-        multiplica_escalar(matriz, 3);
-        pre_ordem(matriz->padrao);
-        printf("\n\n");
+        multiplica_escalar(matriz, 2);
+        multiplica_escalar(transposta, 2);
 
-        // printf("%d\n", acessa_posicao(matriz, 1, 2));
+        p_matriz mult_simetrica = multiplicar_matrizes(matriz, transposta);
 
         destroi_matriz(matriz);
+        destroi_matriz(transposta);
     }
     return 0;
 }

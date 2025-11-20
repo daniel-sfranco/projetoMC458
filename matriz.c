@@ -14,12 +14,19 @@ int **cria_matriz(int n, int m){
 }
 
 
-int acessa_matriz(int linha, int coluna, int **matriz){
+void destroi_matriz(int **matriz, int n){
+    for(int i = 0; i < n; i++)
+        free(matriz[i]);
+    free(matriz);
+}
+
+
+int acessa_matriz(int **matriz, int linha, int coluna){
     return matriz[linha][coluna];
 }
 
 
-void insere_matriz(int dado, int linha, int coluna, int **matriz){
+void insere_matriz(int **matriz, int dado, int linha, int coluna){
     matriz[linha][coluna] = dado;
 }
 
@@ -79,14 +86,28 @@ int **multiplica_matrizes(int **A, int **B, int linha_a, int linha_b, int coluna
 
 int main(){
     int k, n, m;
-    int **matriz;
+    scanf("%d %d %d", &k, &n, &m);
     while(scanf("%d %d %d", &k, &n, &m) != EOF){
-        int dado, linha, coluna;
-        matriz = cria_matriz(n, m);
-        for(int i = 0; i < k; i++){
+        int **matriz = cria_matriz(n, m);
+        int dado = 0, linha = 0, coluna = 0;
+        for(int i = 0; i < k; i++) {
             scanf("%d %d %d", &dado, &linha, &coluna);
-            insere_matriz(dado, linha, coluna, matriz);
+            insere_matriz(matriz, dado, linha, coluna);
+            int busca = acessa_matriz(matriz, linha, coluna);
         }
+
+        int **transposta = retorna_transposta(matriz, n, m);
+
+        int **soma_simetrica = soma_matrizes(matriz, transposta, n, m, m, n);
+
+        multiplica_escalar(matriz, 2, n, m);
+        multiplica_escalar(transposta, 2, m, n);
+
+        int **mult_simetrica = multiplica_matrizes(matriz, transposta, n, m, m, n);
+
+        destroi_matriz(matriz, n);
+        destroi_matriz(transposta, m);
     }
     return 0;
+
 }
