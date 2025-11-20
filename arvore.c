@@ -71,6 +71,48 @@ p_matriz soma_matrizes(p_matriz matriz1, p_matriz matriz2) {
 	return matriz3;
 }
 
+void inserir_soma_matriz(p_matriz matriz, int dado, int linha, int coluna, int m) {
+    matriz->padrao = soma_no(matriz->padrao, dado, linha, coluna, m);
+    matriz->transposta = soma_no(matriz->transposta, dado, coluna, linha, m);
+}
+
+p_matriz multiplicar_matrizes(p_matriz A, p_matriz B) {
+    p_matriz resultado = cria_matriz(A->n, B->m);
+    recursivo_multiplicar(A->padrao, B->padrao, resultado);
+
+    return  resultado;
+}
+
+void recursivo_multiplicar_A(p_no noA, p_matriz B, p_matriz resultado) {
+    if(noA == NULL)
+        return;
+
+    recursivo_multiplicar_A(noA->esquerdo, B, resultado);
+    int linha_B = noA->coluna;
+    busca_linha_B(B->padrao, linha_B, noA, resultado);
+    recursivo_multiplicar_A(noA->direito, B, resultado);
+}
+
+void busca_linha_B(p_no noB, int linha_B, p_no noA, p_matriz resultado) {
+    if(noB == NULL)
+        return;
+
+    int tamanho_min = linha_B * resultado->m;
+    int tamanho_max = tamanho_min + resultado->m - 1;
+    if (noB->chave > tamanho_min){
+        busca_linha_B(noB->esquerdo, linha_B, noA, resultado);
+    } 
+    if (noB->chave < tamanho_max){
+        busca_linha_B(noB->direito, linha_B, noA, resultado);
+    }
+    if (noB->linha == linha_B ){
+        int dado_C = noA->dado * noB->dado;
+        inserir_soma_matriz(resultado, dado_C, noA->linha, noB->coluna, resultado->m);
+    }
+
+}
+
+
 int main() {
     int k, n, m;
     scanf("%d %d %d", &k, &n, &m);
