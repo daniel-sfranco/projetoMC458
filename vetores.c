@@ -1,7 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+
 #define FATOR 1000
+
 
 typedef struct matriz {
     int tamanho;
@@ -9,6 +11,7 @@ typedef struct matriz {
     int *linha;
     int *coluna;
 } *p_matriz;
+
 
 p_matriz cria_matriz(int k){
     int tamanho = (FATOR * k);
@@ -27,6 +30,7 @@ p_matriz cria_matriz(int k){
     return matriz;
 }
 
+
 void destroi_matriz(p_matriz matriz){
     free(matriz->dados);
     free(matriz->linha);
@@ -34,9 +38,23 @@ void destroi_matriz(p_matriz matriz){
     free(matriz);
 }
 
+
 int gera_hash(int i, int j, int k){
     return (((i * j)+(i + j))*1231) % (FATOR * k); // Pelos testes que eu fiz, parece ser uma boa função
 }
+
+
+int acessar(p_matriz matriz, int linha, int coluna, int k) {
+    int posicao = gera_hash(linha, coluna, k);
+    for (int i = posicao; i < (FATOR * k); i++){
+        if (matriz->linha[i] == linha && matriz->coluna[i] == coluna){
+            return matriz->dados[i];
+        }
+        if (matriz->linha[i] == -1) return -1;
+    }
+    return -1;
+}
+
 
 void inserirOuAtualizar(p_matriz matriz, int valor, int linha, int coluna, int k){
     int posicao = gera_hash(linha, coluna, k);
@@ -53,16 +71,6 @@ void inserirOuAtualizar(p_matriz matriz, int valor, int linha, int coluna, int k
     }
 }
 
-int acessar(p_matriz matriz, int linha, int coluna, int k) {
-    int posicao = gera_hash(linha, coluna, k);
-    for (int i = posicao; i < (FATOR * k); i++){
-        if (matriz->linha[i] == linha && matriz->coluna[i] == coluna){
-            return matriz->dados[i];
-        }
-        if (matriz->linha[i] == -1) return -1;
-    }
-    return -1;
-}
 
 p_matriz retorna_transposta(p_matriz matriz){
     p_matriz transposta = (p_matriz) malloc(sizeof(struct matriz));
@@ -73,11 +81,6 @@ p_matriz retorna_transposta(p_matriz matriz){
     return transposta;
 }
 
-void multiplica_escalar(p_matriz matriz, int escalar){
-    for (int i = 0; i < matriz->tamanho; i++)
-        if (matriz->linha[i] >= 0)
-            matriz->dados[i] *= escalar;
-}
 
 p_matriz soma_matrizes(p_matriz A, p_matriz B){
     p_matriz C = cria_matriz((A->tamanho + B->tamanho)/FATOR);
@@ -107,6 +110,14 @@ p_matriz soma_matrizes(p_matriz A, p_matriz B){
     }
     return C;
 }
+
+
+void multiplica_escalar(p_matriz matriz, int escalar){
+    for (int i = 0; i < matriz->tamanho; i++)
+        if (matriz->linha[i] >= 0)
+            matriz->dados[i] *= escalar;
+}
+
 
 int main() {
     int k, n, m;

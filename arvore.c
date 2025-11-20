@@ -2,12 +2,14 @@
 #include <stdlib.h>
 #include "arvore_utils.c"
 
+
 typedef struct matriz_composta *p_matriz;
 
 struct matriz_composta {
     int n, m;
 	p_no padrao, transposta;
 };
+
 
 p_matriz cria_matriz(int linhas, int colunas) {
     p_matriz matriz = (p_matriz) malloc(sizeof(struct matriz_composta));
@@ -18,9 +20,6 @@ p_matriz cria_matriz(int linhas, int colunas) {
     return matriz;
 }
 
-void recursivo_multiplicar_A(p_no noA, p_matriz B, p_matriz resultado);
-void busca_linha_B(p_no noB, int linha_B, p_no noA, p_matriz resultado);
-void inserir_soma_matriz(p_matriz matriz, int dado, int linha, int coluna, int m);
 
 void destroi_matriz(p_matriz matriz){
     destroi_arvore(matriz->padrao);
@@ -28,33 +27,26 @@ void destroi_matriz(p_matriz matriz){
     free(matriz);
 }
 
-void inserir_atualizar_matriz(p_matriz matriz, int dado, int linha, int coluna, int m) {
-    matriz->padrao = inserir_atualizar(matriz->padrao, dado, linha, coluna, m);
-    matriz->transposta = inserir_atualizar(matriz->transposta, dado, coluna, linha, m);
+
+void inserir_soma_matriz(p_matriz matriz, int dado, int linha, int coluna, int m) {
+    matriz->padrao = soma_no(matriz->padrao, dado, linha, coluna, m);
+    matriz->transposta = soma_no(matriz->transposta, dado, coluna, linha, m);
 }
+
 
 int acessa_posicao(p_matriz matriz, int linha, int coluna, int m) {
     return acessar(matriz->padrao, linha, coluna, m);
 }
 
+
+void inserir_atualizar_matriz(p_matriz matriz, int dado, int linha, int coluna, int m) {
+    matriz->padrao = inserir_atualizar(matriz->padrao, dado, linha, coluna, m);
+    matriz->transposta = inserir_atualizar(matriz->transposta, dado, coluna, linha, m);
+}
+
+
 p_no retorna_transposta(p_matriz matriz){
     return matriz->transposta;
-}
-void recursivo_multiplicar_A(p_no noA, p_matriz B, p_matriz resultado);
-void busca_linha_B(p_no noB, int linha_B, p_no noA, p_matriz resultado);
-void inserir_soma_matriz(p_matriz matriz, int dado, int linha, int coluna, int m);
-
-void multiplica_escalar_rec(p_no arvore, int escalar){
-    if(arvore == NULL)
-        return;
-    arvore->dado = arvore->dado * escalar;
-    multiplica_escalar_rec(arvore->direito, escalar);
-    multiplica_escalar_rec(arvore->esquerdo, escalar);
-}
-
-void multiplica_escalar(p_matriz matriz, int escalar) {
-    multiplica_escalar_rec(matriz->padrao, escalar);
-    multiplica_escalar_rec(matriz->transposta, escalar);
 }
 
 
@@ -65,6 +57,7 @@ p_no soma_matrizes_rec(p_no no1, p_no resultado, int m) {
     soma_matrizes_rec(no1->direito, resultado, m);
 	return resultado;
 }
+
 
 p_matriz soma_matrizes(p_matriz matriz1, p_matriz matriz2) {
 	p_matriz matriz3 = cria_matriz(matriz1->n, matriz1->m);
@@ -77,27 +70,21 @@ p_matriz soma_matrizes(p_matriz matriz1, p_matriz matriz2) {
 	return matriz3;
 }
 
-void inserir_soma_matriz(p_matriz matriz, int dado, int linha, int coluna, int m) {
-    matriz->padrao = soma_no(matriz->padrao, dado, linha, coluna, m);
-    matriz->transposta = soma_no(matriz->transposta, dado, coluna, linha, m);
-}
 
-p_matriz multiplicar_matrizes(p_matriz A, p_matriz B) {
-    p_matriz resultado = cria_matriz(A->n, B->m);
-    recursivo_multiplicar_A(A->padrao, B, resultado);
-
-    return  resultado;
-}
-
-void recursivo_multiplicar_A(p_no noA, p_matriz B, p_matriz resultado) {
-    if(noA == NULL)
+void multiplica_escalar_rec(p_no arvore, int escalar){
+    if(arvore == NULL)
         return;
-
-    recursivo_multiplicar_A(noA->esquerdo, B, resultado);
-    int linha_B = noA->coluna;
-    busca_linha_B(B->padrao, linha_B, noA, resultado);
-    recursivo_multiplicar_A(noA->direito, B, resultado);
+    arvore->dado = arvore->dado * escalar;
+    multiplica_escalar_rec(arvore->direito, escalar);
+    multiplica_escalar_rec(arvore->esquerdo, escalar);
 }
+
+
+void multiplica_escalar(p_matriz matriz, int escalar) {
+    multiplica_escalar_rec(matriz->padrao, escalar);
+    multiplica_escalar_rec(matriz->transposta, escalar);
+}
+
 
 void busca_linha_B(p_no noB, int linha_B, p_no noA, p_matriz resultado) {
     if(noB == NULL)
@@ -116,6 +103,24 @@ void busca_linha_B(p_no noB, int linha_B, p_no noA, p_matriz resultado) {
         inserir_soma_matriz(resultado, dado_C, noA->linha, noB->coluna, resultado->m);
     }
 
+}
+
+
+void recursivo_multiplicar_A(p_no noA, p_matriz B, p_matriz resultado) {
+    if(noA == NULL)
+        return;
+
+    recursivo_multiplicar_A(noA->esquerdo, B, resultado);
+    int linha_B = noA->coluna;
+    busca_linha_B(B->padrao, linha_B, noA, resultado);
+    recursivo_multiplicar_A(noA->direito, B, resultado);
+}
+
+
+p_matriz multiplicar_matrizes(p_matriz A, p_matriz B) {
+    p_matriz resultado = cria_matriz(A->n, B->m);
+    recursivo_multiplicar_A(A->padrao, B, resultado);
+    return  resultado;
 }
 
 

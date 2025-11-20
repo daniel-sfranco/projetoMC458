@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+
 int **cria_matriz(int n, int m){
     int **matriz = (int **) malloc(n * sizeof(int *));
     for(int i = 0; i < n; i++){
@@ -13,13 +14,13 @@ int **cria_matriz(int n, int m){
 }
 
 
-void insere_matriz(int dado, int linha, int coluna, int **matriz){
-    matriz[linha][coluna] = dado;
+int acessa_matriz(int linha, int coluna, int **matriz){
+    return matriz[linha][coluna];
 }
 
 
-int acessa_matriz(int linha, int coluna, int **matriz){
-    return matriz[linha][coluna];
+void insere_matriz(int dado, int linha, int coluna, int **matriz){
+    matriz[linha][coluna] = dado;
 }
 
 
@@ -57,6 +58,7 @@ void multiplica_escalar(int **matriz, int escalar, int n, int m){
         for(int j = 0; j < m; j++)
             matriz[i][j] *= escalar;
 }
+
 
 int **multiplica_matrizes(int **A, int **B, int linha_a, int linha_b, int coluna_a, int coluna_b){
     if(coluna_a != linha_b)

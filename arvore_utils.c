@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+
 typedef struct no *p_no;
 
 struct no {
@@ -9,9 +10,11 @@ struct no {
     p_no esquerdo, direito;
 };
 
+
 int calcula_chave(int linha, int coluna, int m) {
     return (linha * m) + coluna;
 }
+
 
 p_no cria_no(int dado, int linha, int coluna, int m){
     p_no no = (p_no) malloc(sizeof(struct no));
@@ -25,6 +28,7 @@ p_no cria_no(int dado, int linha, int coluna, int m){
     return no;
 }
 
+
 void destroi_arvore(p_no no) {
     if (no != NULL) {
         destroi_arvore(no->esquerdo);
@@ -33,10 +37,12 @@ void destroi_arvore(p_no no) {
     }
 }
 
+
 int mede_altura(p_no no){
     if (no == NULL) return 0;
     return no->altura;
 }
+
 
 p_no rotaciona_direita(p_no no) {
     p_no es = no->esquerdo;
@@ -54,6 +60,7 @@ p_no rotaciona_direita(p_no no) {
     return es;
 }
 
+
 p_no rotaciona_esquerda(p_no no) {
     p_no dir = no->direito;
     p_no dir_es = dir->esquerdo;
@@ -69,6 +76,8 @@ p_no rotaciona_esquerda(p_no no) {
 
     return dir;
 }
+
+
 p_no balancear(p_no no, int chave) {
     int fator_b = 0;
     if (no != NULL)
@@ -89,6 +98,8 @@ p_no balancear(p_no no, int chave) {
 
 	return no;
 }
+
+
 p_no inserir_atualizar(p_no no, int dado, int linha, int coluna, int m) {
     if (no == NULL) {
         p_no novo = cria_no(dado, linha, coluna, m);
@@ -112,6 +123,7 @@ p_no inserir_atualizar(p_no no, int dado, int linha, int coluna, int m) {
 
     return no;
 }
+
 
 p_no soma_no(p_no no, int dado, int linha, int coluna, int m) {
     if (no == NULL) {
@@ -153,7 +165,6 @@ p_no soma_no(p_no no, int dado, int linha, int coluna, int m) {
 }
 
 
-
 int acessar(p_no no, int linha, int coluna, int m) {
     if (no == NULL)
         return 0;
@@ -167,6 +178,7 @@ int acessar(p_no no, int linha, int coluna, int m) {
     }
 }
 
+
 void pre_ordem(p_no no) {
     if(no != NULL) {
         printf("%d(%d,%d) ", no->dado, no->linha, no->coluna);
@@ -174,6 +186,7 @@ void pre_ordem(p_no no) {
         pre_ordem(no->direito);
     }
 }
+
 
 p_no inserir_somar(p_no no, int dado, int linha, int coluna, int m) {
     if (no == NULL) {
@@ -197,3 +210,4 @@ p_no inserir_somar(p_no no, int dado, int linha, int coluna, int m) {
 	no = balancear(no, chave);
     return no;
 }
+
