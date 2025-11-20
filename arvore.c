@@ -149,6 +149,9 @@ int main() {
 
         destroi_matriz(matriz);
         destroi_matriz(transposta);
+        destroi_matriz(soma_simetrica);
+        destroi_matriz(mult_simetrica);
+        printf("Matriz com %d elementos e tamanho %dx%d terminada", k, n, m);
     }
     return 0;
 }
