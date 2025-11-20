@@ -3,7 +3,7 @@ LDFLAGS = -lm
 
 .PHONY: all clean
 
-all: vetores arvore gerador
+all: vetores arvore gerador matriz
 
 vetores: vetores.c
 	gcc $(CFLAGS) vetores.c -o vetores $(LDFLAGS)
@@ -14,5 +14,8 @@ arvore: arvore.c arvore_utils.c
 gerador: gerador.c
 	gcc $(CFLAGS) gerador.c -o gerador $(LDFLAGS)
 
-clean:
-	rm -f vetores arvore gerador
+matriz: matriz.c
+	gcc $(CFLAGS) matriz.c -o matriz $(LDFLAGS)
+
+clean: 
+	rm -f vetores arvore gerador matriz
