@@ -109,15 +109,15 @@ p_matriz soma_matrizes(p_matriz A, p_matriz B){
 }
 
 int main() {
-    int n;
+    int k, n, m;
     printf("Insira o número de elementos não nulos: \n");
-    while(scanf("%d", &n) != EOF){
-        p_matriz matriz = cria_matriz(n);
+    while(scanf("%d %d %d", &k, &n, &m) != EOF){
+        p_matriz matriz = cria_matriz(k);
 
         int dado = 0, linha = 0, coluna = 0;
-        for(int i = 0; i < n; i++) {
+        for(int i = 0; i < k; i++) {
             scanf("%d %d %d", &dado, &linha, &coluna);
-            inserirOuAtualizar(matriz, dado, linha, coluna, n);
+            inserirOuAtualizar(matriz, dado, linha, coluna, k);
         }
         
         p_matriz transposta = retorna_transposta(matriz);
