@@ -8,6 +8,10 @@
 *.elf
 arvore
 vetores
+gerador
+
+# Example files
+*.in
 
 # Linker output
 *.ilk
