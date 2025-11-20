@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include "arvore_utils.c"
 
-
 typedef struct matriz_composta *p_matriz;
 
 struct matriz_composta {
@@ -18,6 +17,10 @@ p_matriz cria_matriz(int linhas, int colunas) {
     matriz->transposta = NULL;
     return matriz;
 }
+
+void recursivo_multiplicar_A(p_no noA, p_matriz B, p_matriz resultado);
+void busca_linha_B(p_no noB, int linha_B, p_no noA, p_matriz resultado);
+void inserir_soma_matriz(p_matriz matriz, int dado, int linha, int coluna, int m);
 
 void destroi_matriz(p_matriz matriz){
     destroi_arvore(matriz->padrao);
@@ -37,6 +40,9 @@ int acessa_posicao(p_matriz matriz, int linha, int coluna, int m) {
 p_no retorna_transposta(p_matriz matriz){
     return matriz->transposta;
 }
+void recursivo_multiplicar_A(p_no noA, p_matriz B, p_matriz resultado);
+void busca_linha_B(p_no noB, int linha_B, p_no noA, p_matriz resultado);
+void inserir_soma_matriz(p_matriz matriz, int dado, int linha, int coluna, int m);
 
 void multiplica_escalar_rec(p_no arvore, int escalar){
     if(arvore == NULL)
@@ -78,7 +84,7 @@ void inserir_soma_matriz(p_matriz matriz, int dado, int linha, int coluna, int m
 
 p_matriz multiplicar_matrizes(p_matriz A, p_matriz B) {
     p_matriz resultado = cria_matriz(A->n, B->m);
-    recursivo_multiplicar(A->padrao, B->padrao, resultado);
+    recursivo_multiplicar_A(A->padrao, B, resultado);
 
     return  resultado;
 }
