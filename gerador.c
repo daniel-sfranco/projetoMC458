@@ -14,8 +14,8 @@ void gerar_matriz(int dimensao, double esparsidade, FILE *arquivo){
     fprintf(arquivo, "%d %d %d\n", numero_elementos, tamanho_max, tamanho_max);
     for(long int i = 0; i < numero_elementos; i++){
         int dado = rand() + 1;
-        int linha = rand() % tamanho_max + 1;
-        int coluna = rand() % tamanho_max + 1;
+        int linha = rand() % tamanho_max;
+        int coluna = rand() % tamanho_max;
         fprintf(arquivo, "%d %d %d\n", dado, linha, coluna);
     }
     fprintf(arquivo, "\n");

@@ -86,14 +86,14 @@ int **multiplica_matrizes(int **A, int **B, int linha_a, int linha_b, int coluna
 
 int main(){
     int k, n, m;
-    scanf("%d %d %d", &k, &n, &m);
     while(scanf("%d %d %d", &k, &n, &m) != EOF){
+        printf("Iniciando iteração com matriz com %d elementos e tamanho %dx%d\n", k, n, m);
         int **matriz = cria_matriz(n, m);
         int dado = 0, linha = 0, coluna = 0;
         for(int i = 0; i < k; i++) {
             scanf("%d %d %d", &dado, &linha, &coluna);
             insere_matriz(matriz, dado, linha, coluna);
-            int busca = acessa_matriz(matriz, linha, coluna);
+            acessa_matriz(matriz, linha, coluna);
         }
 
         int **transposta = retorna_transposta(matriz, n, m);

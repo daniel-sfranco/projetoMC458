@@ -126,14 +126,14 @@ p_matriz multiplicar_matrizes(p_matriz A, p_matriz B) {
 
 int main() {
     int k, n, m;
-    scanf("%d %d %d", &k, &n, &m);
     while(scanf("%d %d %d", &k, &n, &m) != EOF){
+        printf("Iniciando iteração com matriz com %d elementos e tamanho %dx%d\n", k, n, m);
         p_matriz matriz = cria_matriz(n, m);
         int dado = 0, linha = 0, coluna = 0;
         for(int i = 0; i < k; i++) {
             scanf("%d %d %d", &dado, &linha, &coluna);
             inserir_atualizar_matriz(matriz, dado, linha, coluna, m);
-            int busca = acessa_posicao(matriz, linha, coluna, m);
+            acessa_posicao(matriz, linha, coluna, m);
         }
 
         p_matriz transposta = cria_matriz(m, n);
@@ -148,10 +148,10 @@ int main() {
         p_matriz mult_simetrica = multiplicar_matrizes(matriz, transposta);
 
         destroi_matriz(matriz);
-        destroi_matriz(transposta);
+        free(transposta);
         destroi_matriz(soma_simetrica);
         destroi_matriz(mult_simetrica);
-        printf("Matriz com %d elementos e tamanho %dx%d terminada", k, n, m);
+        printf("Matriz com %d elementos e tamanho %dx%d terminada\n", k, n, m);
     }
     return 0;
 }

@@ -121,7 +121,6 @@ void multiplica_escalar(p_matriz matriz, int escalar){
 
 int main() {
     int k, n, m;
-    printf("Insira o número de elementos não nulos: \n");
     while(scanf("%d %d %d", &k, &n, &m) != EOF){
         p_matriz matriz = cria_matriz(k);
 
@@ -129,42 +128,13 @@ int main() {
         for(int i = 0; i < k; i++) {
             scanf("%d %d %d", &dado, &linha, &coluna);
             inserirOuAtualizar(matriz, dado, linha, coluna, k);
+            acessar(matriz, linha, coluna, k);
         }
         
         p_matriz transposta = retorna_transposta(matriz);
 
-        printf("\n");
-        for(int i = 0; i < matriz->tamanho; i++)
-            if (matriz->linha[i] != -1)
-                printf("%d %d %d\n", matriz->dados[i], matriz->linha[i], matriz->coluna[i]);
-
-        printf("\n");
-        for(int i = 0; i < transposta->tamanho; i++)
-            if (transposta->linha[i] != -1)
-                printf("%d %d %d\n", transposta->dados[i], transposta->linha[i], transposta->coluna[i]);
-
         p_matriz soma_simetrica = soma_matrizes(matriz, transposta);
 
-        printf("\n");
-        for(int i = 0; i < soma_simetrica->tamanho; i++)
-            if (soma_simetrica->linha[i] != -1)
-                printf("%d %d %d %d\n", i, soma_simetrica->dados[i], soma_simetrica->linha[i], soma_simetrica->coluna[i]);
-
-        /*
-        for (int i = 0; i < 2; i++){
-            scanf("%d %d", &linha, &coluna);
-            printf("%d \n", acessar(matriz, linha, coluna, n));
-        }
-        */
-
-        /*
-        p_matriz transposta = retorna_transposta(matriz);
-        for(int i = 0; i < FATOR * n; i++) {
-            if(transposta->linha[i] != -1) {
-                printf("%d %d %d\n", transposta->dados[i], transposta->linha[i], transposta->coluna[i]);
-            }
-        }
-        */
         destroi_matriz(matriz);
         destroi_matriz(soma_simetrica);
         free(transposta);
