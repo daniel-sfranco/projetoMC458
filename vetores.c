@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 
-#define FATOR 1000
+#define FATOR 50
 
 
 typedef struct matriz {
@@ -40,13 +40,13 @@ void destroi_matriz(p_matriz matriz){
 
 
 int gera_hash(int i, int j, int k){
-    return (((i * j)+(i + j))*1231) % (FATOR * k); // Pelos testes que eu fiz, parece ser uma boa função
+    return (((i * j) + (i + j)) * 1231) % (FATOR * k); // Pelos testes que eu fiz, parece ser uma boa função
 }
 
 
 int acessar(p_matriz matriz, int linha, int coluna, int k) {
-    int posicao = gera_hash(linha, coluna, k);
-    for (int i = posicao; i < (FATOR * k); i++){
+    long int posicao = gera_hash(linha, coluna, k);
+    for (long int i = posicao; i < (FATOR * k); i++){
         if (matriz->linha[i] == linha && matriz->coluna[i] == coluna){
             return matriz->dados[i];
         }
@@ -58,15 +58,33 @@ int acessar(p_matriz matriz, int linha, int coluna, int k) {
 
 void inserirOuAtualizar(p_matriz matriz, int valor, int linha, int coluna, int k){
     int posicao = gera_hash(linha, coluna, k);
-    for (int i = posicao; i < matriz->tamanho; i++){
+    int inserido = 0;
+    for (int i = posicao; i < (FATOR * k); i++){
         if (matriz->linha[i] == -1){
             matriz->dados[i] = valor;
             matriz->linha[i] = linha;
             matriz->coluna[i] = coluna;
+            inserido = 1;
             break;
         } else if (matriz->linha[i] == linha && matriz->coluna[i] == coluna){
             matriz->dados[i] = valor;
+            inserido = 1;
             break;
+        }
+    }
+    if(inserido == 0){
+        for (int i = 0; i < posicao; i++){
+            if (matriz->linha[i] == -1){
+                matriz->dados[i] = valor;
+                matriz->linha[i] = linha;
+                matriz->coluna[i] = coluna;
+                inserido = 1;
+                break;
+            } else if (matriz->linha[i] == linha && matriz->coluna[i] == coluna){
+                matriz->dados[i] = valor;
+                inserido = 1;
+                break;
+            }
         }
     }
 }
@@ -88,10 +106,6 @@ p_matriz soma_matrizes(p_matriz A, p_matriz B){
     for(int i = 0; i < A->tamanho; i++)
         if(A->linha[i] >= 0)
             inserirOuAtualizar(C, A->dados[i], A->linha[i], A->coluna[i], k);
-    printf("\n");
-    for(int i = 0; i < C->tamanho; i++)
-        if (C->linha[i] != -1)
-            printf("%d %d %d %d\n", i, C->dados[i], C->linha[i], C->coluna[i]);
     for(int i = 0; i < B->tamanho; i++){
         if(B->linha[i] != -1){
             int posicao = gera_hash(B->linha[i], B->coluna[i], k);
@@ -145,8 +159,8 @@ p_matriz multiplicar_matrizes(p_matriz A, p_matriz B){
         return NULL;
     }
     
-    int tamanhok_c = (A->tamanho + B->tamanho)/FATOR; // ka+kb
-    p_matriz resultado = cria_matriz(tamanhok_c);
+    int tamanho_c = (A->tamanho + B->tamanho)/FATOR; // ka+kb
+    p_matriz resultado = cria_matriz(tamanho_c);
 
     for (int i=0; i<A->tamanho; i++){
         if (A->linha[i] != -1){
@@ -169,6 +183,7 @@ p_matriz multiplicar_matrizes(p_matriz A, p_matriz B){
 int main() {
     int k, n, m;
     while(scanf("%d %d %d", &k, &n, &m) != EOF){
+        printf("Iniciando iteração com matriz com %d elementos e tamanho %dx%d\n", k, n, m);
         p_matriz matriz = cria_matriz(k);
 
         int dado = 0, linha = 0, coluna = 0;
@@ -185,7 +200,7 @@ int main() {
         destroi_matriz(matriz);
         destroi_matriz(soma_simetrica);
         free(transposta);
-        printf("Insira o número de elementos não nulos: \n");
+        printf("Matriz com %d elementos e tamanho %dx%d terminada\n", k, n, m);
     }
     return 0;
 }
