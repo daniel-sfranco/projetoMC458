@@ -1,7 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void gerar_matriz(int dimensao, double esparsidade, FILE *arquivo){
+void gerar_matriz(int dimensao, double esparsidade){
+    FILE *arquivo;
+    char nome_arquivo[30];
+    sprintf(nome_arquivo, "entrada_%d_%.8lf.in", dimensao, esparsidade);
+    arquivo = fopen(nome_arquivo, "w");
+    if(arquivo == NULL){
+        printf("Erro ao abrir o arquivo.");
+        return;
+    }
     int tamanho_max = 1;
     for(int i = 0; i < dimensao; i++)
         tamanho_max *= 10;
@@ -20,30 +28,24 @@ void gerar_matriz(int dimensao, double esparsidade, FILE *arquivo){
     }
     fprintf(arquivo, "\n");
     printf("Matriz com dimensão %d e esparsidade %lf inserida corretamente no arquivo.\n",dimensao, esparsidade);
+    fclose(arquivo);
 }
 
 int main(){
-    FILE *arquivo;
-    arquivo = fopen("entrada.in", "w");
-    if(arquivo == NULL){
-        printf("Erro ao abrir o arquivo.");
-        return 1;
-    }
-    gerar_matriz(2, 0.01, arquivo);
-    gerar_matriz(2, 0.05, arquivo);
-    gerar_matriz(2, 0.1, arquivo);
-    gerar_matriz(2, 0.2, arquivo);
-    gerar_matriz(3, 0.01, arquivo);
-    gerar_matriz(3, 0.05, arquivo);
-    gerar_matriz(3, 0.1, arquivo);
-    gerar_matriz(3, 0.2, arquivo);
+    gerar_matriz(2, 0.01);
+    gerar_matriz(2, 0.05);
+    gerar_matriz(2, 0.1);
+    gerar_matriz(2, 0.2);
+    gerar_matriz(3, 0.01);
+    gerar_matriz(3, 0.05);
+    gerar_matriz(3, 0.1);
+    gerar_matriz(3, 0.2);
     double esparsidade = 1.0 / (10.0 * 10.0 * 10.0 * 10.0);
     for(int i = 4; i < 7; i++){
-        gerar_matriz(i, esparsidade, arquivo);
-        gerar_matriz(i, esparsidade / 10, arquivo);
-        gerar_matriz(i, esparsidade / 100, arquivo);
+        gerar_matriz(i, esparsidade);
+        gerar_matriz(i, esparsidade / 10);
+        gerar_matriz(i, esparsidade / 100);
         esparsidade /= 10;
-    }
-    fclose(arquivo);
+    } 
     return 0;
 }
