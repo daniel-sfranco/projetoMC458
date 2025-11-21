@@ -111,11 +111,58 @@ p_matriz soma_matrizes(p_matriz A, p_matriz B){
     return C;
 }
 
-
 void multiplica_escalar(p_matriz matriz, int escalar){
     for (int i = 0; i < matriz->tamanho; i++)
         if (matriz->linha[i] >= 0)
             matriz->dados[i] *= escalar;
+}
+
+
+void inserir_somando(p_matriz matriz, int valor, int linha, int coluna, int k){
+    int posicao = gera_hash(linha, coluna, k);
+    for (int i = posicao; i < matriz->tamanho; i++){
+        if (matriz->linha[i] == -1){
+            matriz->dados[i] = valor;
+            matriz->linha[i] = linha;
+            matriz->coluna[i] = coluna;
+            break;
+        } else if (matriz->linha[i] == linha && matriz->coluna[i] == coluna){
+            matriz->dados[i] += valor;
+            if (matriz->dados[i] == 0){
+                matriz->linha[i]  = -1;
+                matriz->coluna[i] = -1;
+            }
+            break;
+        }
+    }
+}
+ 
+
+
+p_matriz multiplicar_matrizes(p_matriz A, p_matriz B){
+    if (A->coluna != B->linha){
+        printf("O número de COlunas de A deve ser igual ao de Linhas de B\n");
+        return NULL;
+    }
+    
+    int tamanhok_c = (A->tamanho + B->tamanho)/FATOR; // ka+kb
+    p_matriz resultado = cria_matriz(tamanhok_c);
+
+    for (int i=0; i<A->tamanho; i++){
+        if (A->linha[i] != -1){
+            for (int j=0; j<B->tamanho; j++){
+                if (B->linha[j] != -1){
+                    if (A->coluna[i] == B->linha[j]){
+                        inserir_somando(resultado,(A->dados[i] * B->dados[j]), A->linha[i], B->coluna[j], tamanho_c);
+                        
+                    }
+                }
+
+            }
+        }
+    }
+
+    return resultado;
 }
 
 
