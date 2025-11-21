@@ -40,7 +40,12 @@ void destroi_matriz(p_matriz matriz){
 
 
 int gera_hash(int i, int j, int k){
-    return (((i * j) + (i + j)) * 1231) % (FATOR * k); // Pelos testes que eu fiz, parece ser uma boa função
+    
+    long long teste = (((long long)i * (long long)j) + ((long long)i + (long long)j)) * 1231;
+    
+    int resultado = (int)(teste % (long long)(FATOR * k));
+    
+    return resultado;
 }
 
 
