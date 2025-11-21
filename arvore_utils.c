@@ -209,5 +209,5 @@ p_no inserir_somar(p_no no, int dado, int linha, int coluna, int m) {
     
 	no = balancear(no, chave);
     return no;
-}
 
+}
