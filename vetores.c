@@ -39,11 +39,11 @@ void destroi_matriz(p_matriz matriz){
 }
 
 
-int gera_hash(int i, int j, int k){
+long int gera_hash(int i, int j, int k){
     
     long long teste = (((long long)i * (long long)j) + ((long long)i + (long long)j)) * 1231;
     
-    int resultado = (int)(teste % (long long)(FATOR * k));
+    long int resultado = (int)(teste % (long long)(FATOR * k));
     
     return resultado;
 }
@@ -52,6 +52,12 @@ int gera_hash(int i, int j, int k){
 int acessar(p_matriz matriz, int linha, int coluna, int k) {
     long int posicao = gera_hash(linha, coluna, k);
     for (long int i = posicao; i < (FATOR * k); i++){
+        if (matriz->linha[i] == linha && matriz->coluna[i] == coluna){
+            return matriz->dados[i];
+        }
+        if (matriz->linha[i] == -1) return -1;
+    }
+    for (long int i = 0; i < posicao; i++){
         if (matriz->linha[i] == linha && matriz->coluna[i] == coluna){
             return matriz->dados[i];
         }
